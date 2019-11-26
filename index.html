@@ -20,10 +20,10 @@
 		</style>
 	</head>
 	<body>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/109/three.js"></script>
-		<script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/GLTFLoader.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/three-orbitcontrols@2.110.1/OrbitControls.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/dragcontrols-touchevents-threejs@1.0.0-rc.4/DragControls.js"></script>
+		<script src="./three.js"></script>
+		<script src="./GLTFLoader.js"></script>
+		<script src="./OrbitControls.js"></script>
+		<script src="./DragControls.js"></script>
 		<div id="forma"><form>
   Largo:
   <input type="number" name="largo">
@@ -175,7 +175,7 @@
 			var loader = new THREE.GLTFLoader();
 				
 			// Load a glTF resource
-			loader.load('https://drive.google.com/open?id=1K1nfPmhB0sx6JcRtPwvjSyTYZewqas5T', handle_load);
+			loader.load('mdcao767v2.gltf', handle_load);
 			var mesh;	
 				 function handle_load(gltf) {
 
