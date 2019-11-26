@@ -1,0 +1,216 @@
+<html>
+	<head>
+		<title>My first three.js app</title>
+		<style>
+			body { margin: 0px;
+				}
+			canvas {  width: 100% ;height: 100%	;}
+			
+			#canvas2{
+				
+				height: 90%;
+				  
+			}
+			#forma{
+				
+				height: 5%;
+				margin-top: 5px;
+				 
+			}
+		</style>
+	</head>
+	<body>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/109/three.js"></script>
+		<script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/GLTFLoader.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/three-orbitcontrols@2.110.1/OrbitControls.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/dragcontrols-touchevents-threejs@1.0.0-rc.4/DragControls.js"></script>
+		<div id="forma"><form>
+  Largo:
+  <input type="number" name="largo">
+  Ancho:
+  <input type="number" name="ancho">
+  Alto:
+  <input type="number" name="alto">
+</form></div>
+		<div id="canvas2"><script>
+			var collisionMesh = [];
+			var scene = new THREE.Scene();
+			scene.background = new THREE.Color( 0xecf7f9);
+			var camera = new THREE.PerspectiveCamera( 25, window.innerWidth/window.innerHeight, 0.1, 1000 );
+			camera.position.set( 1, 1, 12 );
+
+			var renderer = new THREE.WebGLRenderer({ alpha: true });
+			container = document.getElementById('canvas2');
+			renderer.setSize(container.offsetWidth, container.offsetHeight);
+			document.body.appendChild( container );
+			container.appendChild(renderer.domElement);
+		
+				var ambientLight = new THREE.AmbientLight( 0xcccccc );
+			scene.add( ambientLight );
+							
+			var directionalLight = new THREE.DirectionalLight( 0xf5f5f5,0.3 );
+			directionalLight.position.set( 50, 20, 200).normalize();
+			scene.add( directionalLight );		
+			var helper1 = new THREE.DirectionalLightHelper( directionalLight, 5 );
+			scene.add(helper1);
+
+			var directionalLight2 = new THREE.DirectionalLight( 0xf5f5f5,0.3);
+			directionalLight2.position.set( -50, -20, -200).normalize();
+			scene.add( directionalLight2 );		
+			var helper2 = new THREE.DirectionalLightHelper( directionalLight2, 5 );
+			scene.add(helper2);
+
+			//object array
+			var objetos=[];
+
+			//CONTROLS
+			var controls2 = new THREE.DragControls( objetos, camera, renderer.domElement );
+			var controls = new THREE.OrbitControls( camera, renderer.domElement );	
+
+			// add event listener to highlight dragged objects
+
+			controls2.addEventListener( 'dragstart', function ( event ) {
+
+				event.object.material.color.setHex(0xaaaaaa );
+				console.log(event);
+				controls.enabled = false;
+
+			} );
+
+			controls2.addEventListener( 'dragend', function ( event ) {
+
+				event.object.material.color.setHex(0x000000);
+				controls.enabled = true;
+
+			} );
+			//BOX
+			var geometry = new THREE.BoxGeometry(1,1,1 );
+			var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+			var cube = new THREE.Mesh( geometry, material );
+			scene.add( cube );
+			objetos.push(cube);	
+
+			//
+			var collisionBool;
+
+
+			function reCenter()
+    	{
+
+    			cube.position.z=0;
+    			cube.position.x=0;
+    			cube.position.y=0;
+    			console.log(cube.position);
+
+
+    	}
+			    function checkCollision() {
+        var originPoint = cube.position.clone();
+        for (var vertexIndex = 0; vertexIndex < cube.geometry.vertices.length; vertexIndex++) {
+            var localVertex = cube.geometry.vertices[vertexIndex].clone();
+         
+            var globalVertex = localVertex.applyMatrix4(cube.matrix);
+      
+            var directionVector = globalVertex.sub(cube.position);
+      
+            var ray = new THREE.Raycaster(originPoint, directionVector.clone().normalize());
+            var collisionResults = ray.intersectObjects(collisionMesh);
+            
+            if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length()) {
+          
+                collisionBool=true;
+               // reCenter();
+
+               controls2.enabled=false;
+
+               while(collisionBool)
+               	{
+               		if(cube.position.y>mesh.position.y)
+               {
+               	cube.position.y -= 0.01;
+               }
+
+               if(cube.position.z>mesh.position.z)
+               {
+               	cube.position.z -= 0.01;
+               }
+
+               if(cube.position.x>mesh.position.x)
+               {
+               	cube.position.x -= 0.01;
+               }
+				if(cube.position.y<mesh.position.y)
+               {
+               	cube.position.y += 0.01;
+               }
+
+               if(cube.position.z<mesh.position.z)
+               {
+               	cube.position.z += 0.01;
+               }
+
+               if(cube.position.x<mesh.position.x)
+               {
+               	cube.postion.x += 0.01;
+               }
+
+           }
+
+
+            }
+            else
+            {
+            	collisionBool=false;
+            	controls2.enabled=true;
+
+            }
+        }
+    }
+
+
+
+
+
+			// Instantiate a loader
+			var loader = new THREE.GLTFLoader();
+				
+			// Load a glTF resource
+			loader.load('https://drive.google.com/open?id=1K1nfPmhB0sx6JcRtPwvjSyTYZewqas5T', handle_load);
+			var mesh;	
+				 function handle_load(gltf) {
+
+        console.log(gltf);
+        console.log(gltf.scene);
+        mesh = gltf.scene.children[2];
+        mesh.position.x = 0;
+        mesh.position.z = 0;
+        mesh.position.y =0;
+        scene.add(mesh);
+        mesh.material.transparent = true;
+        mesh.material.opacity = 0.1;
+
+        collisionMesh.push(mesh);
+
+
+        console.log(mesh);
+        var animate = function (){
+				requestAnimationFrame(animate);
+				renderer.render(scene,camera);
+				controls.update();
+				   checkCollision();
+				   console.log(collisionBool);
+				   cube.scale.set(document.getElementsByName("largo")[0].value, document.getElementsByName("alto")[0].value, document.getElementsByName("ancho")[0].value);
+				
+			}
+
+			
+			animate();
+    };
+
+			
+
+
+		</script>
+		</div>
+	</body>
+</html>
