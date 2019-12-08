@@ -152,9 +152,7 @@ THREE.DragControls = function ( _objects, _camera, _domElement ) {
 
 			   
 			    if ( intersects.length > 0 ) {
-			     scene.remove(_selected);
-			     _selected.geometry.dispose();
-			     _selected.material.dispose();
+
 
 			     for (var i = 0; i < objetos.length; i++) {
 			     	if(objetos[i]===_selected)
@@ -179,6 +177,9 @@ THREE.DragControls = function ( _objects, _camera, _domElement ) {
 
 			     	}
 			     }
+			      scene.remove(_selected);
+			     _selected.geometry.dispose();
+			     _selected.material.dispose();
 			     }
 			     
 			     	
