@@ -160,6 +160,7 @@ THREE.DragControls = function ( _objects, _camera, _domElement ) {
 			     	if(objetos[i]===_selected)
 			     	{
 			     		objetos.splice(i,1);
+			     		objetos2.splice(i,1);
 
 			     	}
 			     }
