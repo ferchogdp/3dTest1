@@ -54,7 +54,18 @@ THREE.DragControls = function ( _objects, _camera, _domElement ) {
 	function onDocumentMouseMove( event ) {
 
 		event.preventDefault();
+		var collisionVar;
+		if(_selected !== null )
+		{
 
+			if(_selected.name === "sphere")
+			{
+				collisionVar = [false];
+			}
+			else{
+		collisionVar = checkCollision2(_selected);
+	}
+		}
 		var rect = _domElement.getBoundingClientRect();
 
 		_mouse.x = ( ( event.clientX - rect.left ) / rect.width ) * 2 - 1;
@@ -64,12 +75,12 @@ THREE.DragControls = function ( _objects, _camera, _domElement ) {
 
 		if ( _selected && scope.enabled ) {
 
-			if ( _raycaster.ray.intersectPlane( _plane, _intersection ) ) {
-
+			if ( (_raycaster.ray.intersectPlane( _plane, _intersection)  && collisionVar[0] === false)) {
+				
 				_selected.position.copy( _intersection.sub( _offset ).applyMatrix4( _inverseMatrix ) );
 
 			}
-
+			
 			scope.dispatchEvent( { type: 'drag', object: _selected } );
 
 			return;
@@ -122,6 +133,8 @@ THREE.DragControls = function ( _objects, _camera, _domElement ) {
 
 			_selected = intersects[ 0 ].object;
 
+			console.log(_selected);
+
 			if ( _raycaster.ray.intersectPlane( _plane, _intersection ) ) {
 
 				_inverseMatrix.getInverse( _selected.parent.matrixWorld );
@@ -134,7 +147,35 @@ THREE.DragControls = function ( _objects, _camera, _domElement ) {
 			scope.dispatchEvent( { type: 'dragstart', object: _selected } );
 
 		}
+				  if ( event.which == 3 ) {
+			    
 
+			   
+			    if ( intersects.length > 0 ) {
+			     scene.remove(_selected);
+			     _selected.geometry.dispose();
+			     _selected.material.dispose();
+
+			     for (var i = 0; i < objetos.length; i++) {
+			     	if(objetos[i]===_selected)
+			     	{
+			     		objetos.splice(i,1);
+
+			     	}
+			     }
+			     for (var i = 0; i < collisionMesh.length; i++) {
+			     	if(collisionMesh[i]===_selected)
+			     	{
+			     		collisionMesh.splice(i,1);
+			     	}
+
+			     	}
+
+			     }
+			     
+			     	
+			    }
+			  
 
 	}
 
