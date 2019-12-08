@@ -172,7 +172,7 @@ THREE.DragControls = function ( _objects, _camera, _domElement ) {
 
 			     	}
 			     for (var i = 0; i < objetos2.length; i++) {
-			     	if(objetos[i]===_selected)
+			     	if(objetos2[i]===_selected)
 			     	{
 			     		
 			     		objetos2.splice(i,1);
