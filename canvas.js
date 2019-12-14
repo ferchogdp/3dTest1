@@ -83,8 +83,17 @@
 			  const material = new THREE.MeshBasicMaterial({
 			    map: texture,
 			  });
-			var geometry = new THREE.BoxGeometry(document.getElementsByName("largo")[0].value,document.getElementsByName("alto")[0].value,document.getElementsByName("ancho")[0].value);
-			 var cube = new THREE.Mesh( geometry, material );
+              let geometry;
+              if(document.getElementsByName("unidades")[0].value==="cm")
+              {
+			 geometry = new THREE.BoxGeometry(document.getElementsByName("largo")[0].value/100,document.getElementsByName("alto")[0].value/100,document.getElementsByName("ancho")[0].value/100);
+			} 
+            if(document.getElementsByName("unidades")[0].value==="in")
+              {
+             geometry = new THREE.BoxGeometry(document.getElementsByName("largo")[0].value/39.37,document.getElementsByName("alto")[0].value/39.37,document.getElementsByName("ancho")[0].value/39.37);
+            } 
+
+             var cube = new THREE.Mesh( geometry, material );
 				
 			 	cube.position.set(sphere.position.x,sphere.position.y,sphere.position.z);
 			 
