@@ -84,11 +84,11 @@
 			    map: texture,
 			  });
               let geometry;
-              if(document.getElementsByName("unidades")[0].value==="cm")
+              if(document.getElementsByName("unidades")[0].checked)
               {
 			 geometry = new THREE.BoxGeometry(document.getElementsByName("largo")[0].value/100,document.getElementsByName("alto")[0].value/100,document.getElementsByName("ancho")[0].value/100);
 			} 
-            if(document.getElementsByName("unidades")[0].value==="in")
+            if(document.getElementsByName("unidades")[1].checked)
               {
              geometry = new THREE.BoxGeometry(document.getElementsByName("largo")[0].value/39.37,document.getElementsByName("alto")[0].value/39.37,document.getElementsByName("ancho")[0].value/39.37);
             } 
